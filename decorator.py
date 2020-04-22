@@ -7,13 +7,14 @@ Created on Wed Apr 22 17:57:11 2020
 """
 import time
 from contextlib import ContextDecorator
+from random import random
 
 #класс декоратора с возможностью использования как контекстного менеджера
 class Timer(ContextDecorator):
-    
+
     def __init__(self,num_runs):
         self.num_runs = num_runs
-        
+
     def __call__(self,func):
         def inner_function(args):
             avg_time = 0
@@ -25,13 +26,13 @@ class Timer(ContextDecorator):
                 avg_time /= self.num_runs
             return "Time %.5f" %avg_time
         return inner_function
-    
+
     def __enter__(self):
         return self
-    
+
     def __exit__(self, *args):
         return self
-    
+
 #обычный декоратор
 def time_this(num_runs):
     def decorator(func):
@@ -46,3 +47,11 @@ def time_this(num_runs):
             return "Time %.5f" %avg_time
         return wrap
     return decorator
+
+@Timer(10)
+def f(n):
+   for j in range(n):
+        pass
+
+with Timer(10):
+    print(f(1000000))
